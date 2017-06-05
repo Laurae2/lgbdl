@@ -98,14 +98,14 @@ lgb.dl <- function(commit = "master",
       if (compiler == "gcc") {
         
         cat(paste0("mkdir build && cd build", "\n"), file = lgb_git_file, append = TRUE)
-        cat(paste0("cmake -G \"MinGW Makefiles\" ..", "\n"), file = lgb_git_file, append = TRUE)
-        cat(paste0("cmake -G \"MinGW Makefiles\" ..", "\n"), file = lgb_git_file, append = TRUE) # Failsafe as R has .sh
+        cat(paste0("cmake -G \"MinGW Makefiles\" ", ifelse(use_gpu == TRUE, "-DUSE_GPU=1", ""), " ..", "\n"), file = lgb_git_file, append = TRUE)
+        cat(paste0("cmake -G \"MinGW Makefiles\" ", ifelse(use_gpu == TRUE, "-DUSE_GPU=1", ""), " ..", "\n"), file = lgb_git_file, append = TRUE) # Failsafe as R has .sh
         cat(paste0("mingw32-make.exe -j", cores, "\n"), file = lgb_git_file, append = TRUE)
         
       } else {
         
         cat(paste0("mkdir build && cd build", "\n"), file = lgb_git_file, append = TRUE)
-        cat(paste0("cmake -DCMAKE_GENERATOR_PLATFORM=x64 ..", "\n"), file = lgb_git_file, append = TRUE)
+        cat(paste0("cmake -DCMAKE_GENERATOR_PLATFORM=x64 ", ifelse(use_gpu == TRUE, "-DUSE_GPU=1", ""), "..", "\n"), file = lgb_git_file, append = TRUE)
         cat(paste0("cmake --build . --target _lightgbm  --config Release", "\n"), file = lgb_git_file, append = TRUE)
         
       }
@@ -150,8 +150,8 @@ lgb.dl <- function(commit = "master",
     # If no lib is specified, force compilation
     if (libdll == "") {
       cat(paste0("mkdir build && cd build", "\n"), file = lgb_git_file, append = TRUE)
-      cat(paste0("cmake ..", "\n"), file = lgb_git_file, append = TRUE)
-      cat(paste0("cmake ..", "\n"), file = lgb_git_file, append = TRUE) # Failsafe as R has .sh
+      cat(paste0("cmake ", ifelse(use_gpu == TRUE, "-DUSE_GPU=1", ""), "..", "\n"), file = lgb_git_file, append = TRUE)
+      cat(paste0("cmake ", ifelse(use_gpu == TRUE, "-DUSE_GPU=1", ""), "..", "\n"), file = lgb_git_file, append = TRUE) # Failsafe as R has .sh
       cat(paste0("make -j", cores), file = lgb_git_file, append = TRUE)
     } else {
       cat(paste0("cp ", libdll, " ", file.path(lgb_git_dir, "LightGBM"), "\n"), file = lgb_git_file, append = TRUE) # Move dll/lib

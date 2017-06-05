@@ -116,8 +116,6 @@ lgb.dl <- function(commit = "master",
       
     }
     
-    #cat(paste0("sed -i 's/use_precompile <- FALSE/use_precompile <- TRUE/g' \"", file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs.R", fsep = "\\"), "\""), file = lgb_git_file, append = TRUE)
-    
     # Do actions
     system(lgb_git_file)
     
@@ -126,10 +124,10 @@ lgb.dl <- function(commit = "master",
     cat(gsub("use_precompile <- FALSE", "use_precompile <- TRUE", readLines(file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs2.R", fsep = "\\"))), file = file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs.R", fsep = "\\"), sep = "\n")
     
     # Install package
-    system(paste0(R.home("bin"), "/R CMD INSTALL --build ", file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\")))
+    install.packages(file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\"), repos = NULL, type = "source")
     
     # Get rid of the created temporary folder
-    #unlink(paste0(file.path(lgb_git_dir, "LightGBM", fsep = "\\")), recursive = TRUE, force = TRUE)
+    unlink(paste0(file.path(lgb_git_dir, "LightGBM", fsep = "\\")), recursive = TRUE, force = TRUE)
     
   } else {
     
@@ -167,7 +165,7 @@ lgb.dl <- function(commit = "master",
     cat(gsub("use_precompile <- FALSE", "use_precompile <- TRUE", readLines(file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs2.R"))), file = file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs.R"), sep = "\n")
     
     # Install package
-    system(paste0(R.home("bin"), "/R CMD INSTALL --build ", file.path(lgb_git_dir, "LightGBM", "R-package")))
+    install.packages(file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\"), repos = NULL, type = "source")
     
     # Get rid of the created temporary folder
     unlink(paste0(file.path(lgb_git_dir, "LightGBM")), recursive = TRUE, force = TRUE)

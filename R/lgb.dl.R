@@ -12,6 +12,7 @@
 # @param msbuild Applicable only to Windows and Visual Studio. The path to \code{msbuild} of the appropriate Visual Studio compiler. Defaults to \code{"C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\MSBuild\\15.0\\Bin"}
 #' @param libdll Applicable only if you use a precompiled dll/lib. The precompiled dll/lib to use. Defaults to \code{""}.
 #' @param repo The link to the repository. Defaults to \code{"https://github.com/Microsoft/LightGBM"}.
+#' @param use_gpu Whether to install with GPU enabled or not. Cannot use \code{libdll} if \code{use_gpu} is \code{TRUE}. Defaults to \code{FALSE}.
 #' @param cores The number of cores to use for compilation, ignored for Visual Studio. Defaults to \code{1}.
 #' 
 #' @return A logical describing whether the LightGBM package was installed or not (\code{TRUE} if installed, \code{FALSE} if installation failed AND you did not have the package before).
@@ -64,6 +65,7 @@ lgb.dl <- function(commit = "master",
                    #msbuild = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\MSBuild\\15.0\\Bin",
                    libdll = "",
                    repo = "https://github.com/Microsoft/LightGBM",
+                   use_gpu = FALSE,
                    cores = 1) {
   
   # Generates temporary dir
@@ -97,18 +99,14 @@ lgb.dl <- function(commit = "master",
         
         cat(paste0("mkdir build && cd build", "\n"), file = lgb_git_file, append = TRUE)
         cat(paste0("cmake -G \"MinGW Makefiles\" ..", "\n"), file = lgb_git_file, append = TRUE)
-        cat(paste0("cmake -G \"MinGW Makefiles\" ..", "\n"), file = lgb_git_file, append = TRUE) # Failsafe
-        cat(paste0("mingw32-make.exe -j", cores), file = lgb_git_file, append = TRUE)
+        cat(paste0("cmake -G \"MinGW Makefiles\" ..", "\n"), file = lgb_git_file, append = TRUE) # Failsafe as R has .sh
+        cat(paste0("mingw32-make.exe -j", cores, "\n"), file = lgb_git_file, append = TRUE)
         
       } else {
         
-        # Old installation way
-        #cat(paste0("\"", file.path(devenv, "devenv", fsep = "\\"), "\" ./windows/LightGBM.sln /Upgrade", "\n"), file = lgb_git_file, append = TRUE)
-        #cat(paste0("\"", file.path(msbuild, "msbuild", fsep = "\\"), "\" ./windows/LightGBM.vcxproj /p:configuration=DLL /p:platform=x64", "\n"), file = lgb_git_file, append = TRUE)
-        
         cat(paste0("mkdir build && cd build", "\n"), file = lgb_git_file, append = TRUE)
         cat(paste0("cmake -DCMAKE_GENERATOR_PLATFORM=x64 ..", "\n"), file = lgb_git_file, append = TRUE)
-        cat(paste0("cmake --build . --target _lightgbm  --config Release"), file = lgb_git_file, append = TRUE)
+        cat(paste0("cmake --build . --target _lightgbm  --config Release", "\n"), file = lgb_git_file, append = TRUE)
         
       }
       
@@ -118,20 +116,20 @@ lgb.dl <- function(commit = "master",
       
     }
     
-    #cat(paste0(R.home("bin"), "/R CMD INSTALL --build ", file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\")), file = lgb_git_file, append = TRUE) # Install
-    
-    #cat(paste0(R.home("bin"), "/R CMD build ", file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\")), file = lgb_git_file, append = TRUE) # Install
-    #cat(paste0(R.home("bin"), "/R CMD INSTALL ", file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\")), file = lgb_git_file, append = TRUE) # Install
+    #cat(paste0("sed -i 's/use_precompile <- FALSE/use_precompile <- TRUE/g' \"", file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs.R", fsep = "\\"), "\""), file = lgb_git_file, append = TRUE)
     
     # Do actions
     system(lgb_git_file)
     
+    # Strange workaround to rename stuff
+    file.rename(from = file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs.R", fsep = "\\"), to = file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs2.R", fsep = "\\"))
+    cat(gsub("use_precompile <- FALSE", "use_precompile <- TRUE", readLines(file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs2.R", fsep = "\\"))), file = file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs.R", fsep = "\\"), sep = "\n")
+    
     # Install package
-    #devtools::install(file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\"))
     system(paste0(R.home("bin"), "/R CMD INSTALL --build ", file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\")))
     
     # Get rid of the created temporary folder
-    unlink(paste0(file.path(lgb_git_dir, "LightGBM", fsep = "\\")), recursive = TRUE, force = TRUE)
+    #unlink(paste0(file.path(lgb_git_dir, "LightGBM", fsep = "\\")), recursive = TRUE, force = TRUE)
     
   } else {
     
@@ -155,7 +153,7 @@ lgb.dl <- function(commit = "master",
     if (libdll == "") {
       cat(paste0("mkdir build && cd build", "\n"), file = lgb_git_file, append = TRUE)
       cat(paste0("cmake ..", "\n"), file = lgb_git_file, append = TRUE)
-      cat(paste0("cmake ..", "\n"), file = lgb_git_file, append = TRUE) # Failsafe
+      cat(paste0("cmake ..", "\n"), file = lgb_git_file, append = TRUE) # Failsafe as R has .sh
       cat(paste0("make -j", cores), file = lgb_git_file, append = TRUE)
     } else {
       cat(paste0("cp ", libdll, " ", file.path(lgb_git_dir, "LightGBM"), "\n"), file = lgb_git_file, append = TRUE) # Move dll/lib
@@ -164,8 +162,11 @@ lgb.dl <- function(commit = "master",
     # Do actions
     system(lgb_git_file)
     
+    # Strange workaround to rename stuff
+    file.rename(from = file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs.R"), to = file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs2.R"))
+    cat(gsub("use_precompile <- FALSE", "use_precompile <- TRUE", readLines(file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs2.R"))), file = file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs.R"), sep = "\n")
+    
     # Install package
-    #devtools::install(file.path(lgb_git_dir, "LightGBM", "R-package"))
     system(paste0(R.home("bin"), "/R CMD INSTALL --build ", file.path(lgb_git_dir, "LightGBM", "R-package")))
     
     # Get rid of the created temporary folder

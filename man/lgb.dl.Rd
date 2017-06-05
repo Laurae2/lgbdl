@@ -5,7 +5,8 @@
 \title{Install LightGBM from source}
 \usage{
 lgb.dl(commit = "master", compiler = "gcc", libdll = "",
-  repo = "https://github.com/Microsoft/LightGBM", cores = 1)
+  repo = "https://github.com/Microsoft/LightGBM", use_gpu = FALSE,
+  cores = 1)
 }
 \arguments{
 \item{commit}{The commit / branch to use. Put \code{""} for master branch. Defaults to \code{"master"}.}
@@ -15,6 +16,8 @@ lgb.dl(commit = "master", compiler = "gcc", libdll = "",
 \item{libdll}{Applicable only if you use a precompiled dll/lib. The precompiled dll/lib to use. Defaults to \code{""}.}
 
 \item{repo}{The link to the repository. Defaults to \code{"https://github.com/Microsoft/LightGBM"}.}
+
+\item{use_gpu}{Whether to install with GPU enabled or not. Cannot use \code{libdll} if \code{use_gpu} is \code{TRUE}. Defaults to \code{FALSE}.}
 
 \item{cores}{The number of cores to use for compilation, ignored for Visual Studio. Defaults to \code{1}.}
 }

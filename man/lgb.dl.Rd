@@ -4,19 +4,13 @@
 \alias{lgb.dl}
 \title{Install LightGBM from source}
 \usage{
-lgb.dl(commit = "master", compiler = "gcc",
-  devenv = "C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\Preview\\\\Community\\\\Common7\\\\IDE",
-  msbuild = "C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\Preview\\\\Community\\\\MSBuild\\\\15.0\\\\Bin",
-  libdll = "", repo = "https://github.com/Microsoft/LightGBM", cores = 1)
+lgb.dl(commit = "master", compiler = "gcc", libdll = "",
+  repo = "https://github.com/Microsoft/LightGBM", cores = 1)
 }
 \arguments{
 \item{commit}{The commit / branch to use. Put \code{""} for master branch. Defaults to \code{"master"}.}
 
 \item{compiler}{Applicable only to Windows. The compiler to use (either \code{"gcc"} for MinGW or \code{"vs"} for Visual Studio). Defaults to \code{"gcc"}.}
-
-\item{devenv}{Applicable only to Windows and Visual Studio. The path to \code{devenv} of the appropriate Visual Studio compiler. Defaults to \code{"C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\Common7\\IDE"}}
-
-\item{msbuild}{Applicable only to Windows and Visual Studio. The path to \code{msbuild} of the appropriate Visual Studio compiler. Defaults to \code{"C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\MSBuild\\15.0\\Bin"}}
 
 \item{libdll}{Applicable only if you use a precompiled dll/lib. The precompiled dll/lib to use. Defaults to \code{""}.}
 

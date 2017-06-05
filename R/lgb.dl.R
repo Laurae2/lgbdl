@@ -8,8 +8,8 @@
 #' 
 #' @param commit The commit / branch to use. Put \code{""} for master branch. Defaults to \code{"master"}.
 #' @param compiler Applicable only to Windows. The compiler to use (either \code{"gcc"} for MinGW or \code{"vs"} for Visual Studio). Defaults to \code{"gcc"}.
-#' @param devenv Applicable only to Windows and Visual Studio. The path to \code{devenv} of the appropriate Visual Studio compiler. Defaults to \code{"C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\Common7\\IDE"}
-#' @param msbuild Applicable only to Windows and Visual Studio. The path to \code{msbuild} of the appropriate Visual Studio compiler. Defaults to \code{"C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\MSBuild\\15.0\\Bin"}
+# @param devenv Applicable only to Windows and Visual Studio. The path to \code{devenv} of the appropriate Visual Studio compiler. Defaults to \code{"C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\Common7\\IDE"}
+# @param msbuild Applicable only to Windows and Visual Studio. The path to \code{msbuild} of the appropriate Visual Studio compiler. Defaults to \code{"C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\MSBuild\\15.0\\Bin"}
 #' @param libdll Applicable only if you use a precompiled dll/lib. The precompiled dll/lib to use. Defaults to \code{""}.
 #' @param repo The link to the repository. Defaults to \code{"https://github.com/Microsoft/LightGBM"}.
 #' @param cores The number of cores to use for compilation, ignored for Visual Studio. Defaults to \code{1}.
@@ -61,8 +61,8 @@
 
 lgb.dl <- function(commit = "master",
                    compiler = "gcc",
-                   devenv = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\Common7\\IDE",
-                   msbuild = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\MSBuild\\15.0\\Bin",
+                   #devenv = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\Common7\\IDE",
+                   #msbuild = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\MSBuild\\15.0\\Bin",
                    libdll = "",
                    repo = "https://github.com/Microsoft/LightGBM",
                    cores = 1) {
@@ -103,8 +103,13 @@ lgb.dl <- function(commit = "master",
         
       } else {
         
-        cat(paste0("\"", file.path(devenv, "devenv", fsep = "\\"), "\" ./windows/LightGBM.sln /Upgrade", "\n"), file = lgb_git_file, append = TRUE)
-        cat(paste0("\"", file.path(msbuild, "msbuild", fsep = "\\"), "\" ./windows/LightGBM.vcxproj /p:configuration=DLL /p:platform=x64", "\n"), file = lgb_git_file, append = TRUE)
+        # Old installation way
+        #cat(paste0("\"", file.path(devenv, "devenv", fsep = "\\"), "\" ./windows/LightGBM.sln /Upgrade", "\n"), file = lgb_git_file, append = TRUE)
+        #cat(paste0("\"", file.path(msbuild, "msbuild", fsep = "\\"), "\" ./windows/LightGBM.vcxproj /p:configuration=DLL /p:platform=x64", "\n"), file = lgb_git_file, append = TRUE)
+        
+        cat(paste0("mkdir build && cd build", "\n"), file = lgb_git_file, append = TRUE)
+        cat(paste0("cmake -DCMAKE_GENERATOR_PLATFORM=x64 ..", "\n"), file = lgb_git_file, append = TRUE)
+        cat(paste0("cmake --build . --target _lightgbm  --config Release"), file = lgb_git_file, append = TRUE)
         
       }
       

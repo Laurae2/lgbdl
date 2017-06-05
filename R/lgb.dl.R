@@ -18,11 +18,10 @@
 #' 
 #' @examples
 #' \dontrun{
-#' # Install using Visual Studio 2017 Community
+#' # Install using Visual Studio
+#' # (Download: http://landinghub.visualstudio.com/visual-cpp-build-tools)
 #' lgb.dl(commit = "master",
 #'        compiler = "vs",
-#'        devenv = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\Common7\\IDE",
-#'        msbuild = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Preview\\Community\\MSBuild\\15.0\\Bin",
 #'        repo = "https://github.com/Microsoft/LightGBM",
 #'        cores = 4)
 #' 

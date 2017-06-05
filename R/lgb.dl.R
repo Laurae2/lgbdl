@@ -114,11 +114,17 @@ lgb.dl <- function(commit = "master",
       
     }
     
+    #cat(paste0(R.home("bin"), "/R CMD INSTALL --build ", file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\")), file = lgb_git_file, append = TRUE) # Install
+    
+    #cat(paste0(R.home("bin"), "/R CMD build ", file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\")), file = lgb_git_file, append = TRUE) # Install
+    #cat(paste0(R.home("bin"), "/R CMD INSTALL ", file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\")), file = lgb_git_file, append = TRUE) # Install
+    
     # Do actions
     system(lgb_git_file)
     
     # Install package
-    devtools::install(file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\"))
+    #devtools::install(file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\"))
+    system(paste0(R.home("bin"), "/R CMD INSTALL --build ", file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\")))
     
     # Get rid of the created temporary folder
     unlink(paste0(file.path(lgb_git_dir, "LightGBM", fsep = "\\")), recursive = TRUE, force = TRUE)
@@ -155,7 +161,8 @@ lgb.dl <- function(commit = "master",
     system(lgb_git_file)
     
     # Install package
-    devtools::install(file.path(lgb_git_dir, "LightGBM", "R-package"))
+    #devtools::install(file.path(lgb_git_dir, "LightGBM", "R-package"))
+    system(paste0(R.home("bin"), "/R CMD INSTALL --build ", file.path(lgb_git_dir, "LightGBM", "R-package")))
     
     # Get rid of the created temporary folder
     unlink(paste0(file.path(lgb_git_dir, "LightGBM")), recursive = TRUE, force = TRUE)

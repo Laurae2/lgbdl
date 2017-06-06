@@ -165,7 +165,7 @@ lgb.dl <- function(commit = "master",
     cat(gsub("use_precompile <- FALSE", "use_precompile <- TRUE", readLines(file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs2.R"))), file = file.path(lgb_git_dir, "LightGBM", "R-package", "src", "install.libs.R"), sep = "\n")
     
     # Install package
-    install.packages(file.path(lgb_git_dir, "LightGBM", "R-package", fsep = "\\"), repos = NULL, type = "source")
+    install.packages(file.path(lgb_git_dir, "LightGBM", "R-package"), repos = NULL, type = "source")
     
     # Get rid of the created temporary folder
     unlink(paste0(file.path(lgb_git_dir, "LightGBM")), recursive = TRUE, force = TRUE)

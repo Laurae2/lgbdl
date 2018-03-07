@@ -157,6 +157,9 @@ lgb.dl <- function(commit = "master",
       cat(paste0("cp ", libdll, " ", file.path(lgb_git_dir, "LightGBM"), "\n"), file = lgb_git_file, append = TRUE) # Move dll/lib
     }
     
+    #Set permissions on script
+    Sys.chmod(lgb_git_file, mode = "0777", use_umask = TRUE)
+    
     # Do actions
     system(lgb_git_file)
     

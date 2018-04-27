@@ -6,7 +6,8 @@
 \usage{
 lgb.dl(commit = "master", compiler = "gcc", libdll = "",
   repo = "https://github.com/Microsoft/LightGBM", use_gpu = FALSE,
-  cores = 1)
+  cores = 1, R35 = ((as.numeric(R.Version()$major) == 3) &
+  (as.numeric(R.Version()$minor) >= 5)) | (as.numeric(R.Version()$major) > 3))
 }
 \arguments{
 \item{commit}{The commit / branch to use. Put \code{""} for master branch. Defaults to \code{"master"}.}
@@ -20,6 +21,8 @@ lgb.dl(commit = "master", compiler = "gcc", libdll = "",
 \item{use_gpu}{Whether to install with GPU enabled or not. Cannot use \code{libdll} if \code{use_gpu} is \code{TRUE}. Defaults to \code{FALSE}.}
 
 \item{cores}{The number of cores to use for compilation, ignored for Visual Studio. Defaults to \code{1}.}
+
+\item{R35}{Whether to compile or not for R version 3.5 and later. If you use R 3.5 or later, please set this to \code{TRUE}. Defaults to \code{((as.numeric(R.Version()$major) == 3) & (as.numeric(R.Version()$minor) >= 5)) | (as.numeric(R.Version()$major) > 3)}, which means attempt to automatically find the version and use the correct flag.}
 }
 \value{
 A logical describing whether the LightGBM package was installed or not (\code{TRUE} if installed, \code{FALSE} if installation failed AND you did not have the package before).
@@ -46,7 +49,7 @@ lgb.dl(commit = "master",
        compiler = "gcc",
        repo = "https://github.com/Microsoft/LightGBM",
        cores = 4)
-       
+
 # Install using precompiled DLL in Windows
 lgb.dl(commit = "master",
        libdll = "C:\\\\xgboost\\\\LightGBM\\\\windows\\\\x64\\\\DLL\\\\lib_lightgbm.dll",

@@ -6,8 +6,7 @@
 \usage{
 lgb.dl(commit = "master", compiler = "gcc", libdll = "",
   repo = "https://github.com/Microsoft/LightGBM", use_gpu = FALSE,
-  cores = 1, R35 = ((as.numeric(R.Version()$major) == 3) &
-  (as.numeric(R.Version()$minor) >= 5)) | (as.numeric(R.Version()$major) > 3))
+  cores = 1)
 }
 \arguments{
 \item{commit}{The commit / branch to use. Put \code{""} for master branch. Defaults to \code{"master"}.}
@@ -18,17 +17,15 @@ lgb.dl(commit = "master", compiler = "gcc", libdll = "",
 
 \item{repo}{The link to the repository. Defaults to \code{"https://github.com/Microsoft/LightGBM"}.}
 
-\item{use_gpu}{Whether to install with GPU enabled or not. Cannot use \code{libdll} if \code{use_gpu} is \code{TRUE}. Defaults to \code{FALSE}.}
+\item{use_gpu}{Whether to install with GPU enabled or not. Defaults to \code{FALSE}.}
 
 \item{cores}{The number of cores to use for compilation, ignored for Visual Studio. Defaults to \code{1}.}
-
-\item{R35}{Whether to compile or not for R version 3.5 and later. If you use R 3.5 or later, please set this to \code{TRUE}. Defaults to \code{((as.numeric(R.Version()$major) == 3) & (as.numeric(R.Version()$minor) >= 5)) | (as.numeric(R.Version()$major) > 3)}, which means attempt to automatically find the version and use the correct flag.}
 }
 \value{
 A logical describing whether the LightGBM package was installed or not (\code{TRUE} if installed, \code{FALSE} if installation failed AND you did not have the package before).
 }
 \description{
-Downloads and install LightGBM from repository. Allows to customize the commit/branch used, the compiler, using a precompiled lib/dll, the link to the repository (if using a custom fork), and the number of cores used (for non-Visual Studio compilations). Requires \code{git} and compiler \code{make} (or \code{mingw32-make} for MinGW) in \code{PATH} environment variable. Windows uses \code{\\\\} (backward slashes) while Linux uses \code{/} (forward slashes).
+Downloads and install LightGBM from repository. Allows to customize the commit/branch used, the compiler, use a precompiled lib/dll, the link to the repository (if using a custom fork), and the number of cores used (for non-Visual Studio compilations). Requires \code{git} and compiler \code{make} (or \code{mingw32-make} for MinGW) in \code{PATH} environment variable. Windows uses \code{\\\\} (backward slashes) while Linux uses \code{/} (forward slashes) but you can mix them.
 }
 \details{
 This installation function supports only Windows (Visual Studio and MinGW) and Linux (gcc and any other compiler making use of \code{make}). Performance of Visual Studio is higher when multithreading is heavy, while MinGW performance is higher when you are using a domestic computer (low number of physical cores, like 2 or 4).
@@ -41,20 +38,19 @@ Check here for more details: Laurae's \href{https://github.com/Microsoft/LightGB
 # (Download: http://landinghub.visualstudio.com/visual-cpp-build-tools)
 lgb.dl(commit = "master",
        compiler = "vs",
-       repo = "https://github.com/Microsoft/LightGBM",
-       cores = 4)
+       repo = "https://github.com/Microsoft/LightGBM")
 
 # Install using Rtools MinGW or use Linux compilation
 lgb.dl(commit = "master",
        compiler = "gcc",
        repo = "https://github.com/Microsoft/LightGBM",
-       cores = 4)
+       cores = 2)
 
 # Install using precompiled DLL in Windows
 lgb.dl(commit = "master",
        libdll = "C:\\\\xgboost\\\\LightGBM\\\\windows\\\\x64\\\\DLL\\\\lib_lightgbm.dll",
        repo = "https://github.com/Microsoft/LightGBM",
-       cores = 4)
+       cores = 2)
 
 # Test package
 library(lightgbm)

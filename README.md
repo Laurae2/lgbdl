@@ -2,6 +2,8 @@
 
 This is Laurae's LightGBM online installer: it allows to install LightGBM from source directly from your R terminal.
 
+Please go to branch `pre-2.2.0` for a LightGBM version below 2.2.0.
+
 ## Installation
 
 ```r
@@ -23,11 +25,6 @@ In addition, specific software must be installed for Windows:
 In Linux, you can use repositories to install `git` and `cmake`.
 
 For GPU compilation, it requires Boost libraries as outlined in the [LightGBM R official documentation](https://github.com/Microsoft/LightGBM/tree/master/R-package).
-
-R versioning is automatically handled:
-
-* Pre R 3.5 versions are ommitting USE_R35 (`R35` in lgbdl)
-* Post (or same as) R 3.5 versions are specifying the USE_R35 (`R35` in lgbdl) flag
 
 ## Usage
 
@@ -52,13 +49,14 @@ lgbdl::lgb.dl(compiler = "vs", use_gpu = TRUE)
 For installing a specific commit of LightGBM:
 
 ```r
-lgbdl::lgb.dl(commit = "b6db7e2", compiler = "vs")
+lgbdl::lgb.dl(commit = "577a03c", compiler = "vs")
 ```
 
 ## Tests
 
 Tested working on:
 
-- Visual Studio 2015
-- Visual Studio 2017
-- MinGW
+- Linux + gcc
+- Windows + Visual Studio 2015
+- Windows + Visual Studio 2017
+- Windows + MinGW

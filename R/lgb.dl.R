@@ -78,7 +78,7 @@ lgb.dl <- function(commit = "master",
     lgb_git_file <- file.path(lgb_git_dir, "temp.bat", fsep = "\\")
 
     # Use git to fetch data from repository
-    cat(paste0("c:", "\n"), file = lgb_git_file)
+    cat(paste0(substr(lgb_git_dir, 1, 1), ":", "\n"), file = lgb_git_file)
     cat(paste0("cd ", lgb_git_dir, "\n"), file = lgb_git_file, append = TRUE)
     cat(paste0("git clone --recursive ", repo, "\n"), file = lgb_git_file, append = TRUE)
     cat(paste0("cd LightGBM", "\n"), file = lgb_git_file, append = TRUE)

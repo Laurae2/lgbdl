@@ -117,6 +117,11 @@ lgb.dl <- function(commit = "master",
     Sys.chmod(lgb_git_file, mode = "0777", use_umask = TRUE)
 
   }
+  
+  # Must move folder for GPU
+  if (use_gpu == TRUE) {
+    cat(paste0("cp -r ", file.path(lgb_git_dir, "LightGBM/compute/include/boost "), file.path(lgb_git_dir, "LightGBM/include/boost")), file = lgb_git_file, append = TRUE)
+  }
 
   # Do actions
   system(lgb_git_file)
